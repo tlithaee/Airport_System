@@ -6,7 +6,8 @@ CREATE TABLE Passport (
 
 CREATE TABLE Kelas (
     K_ID CHAR(1) PRIMARY KEY,
-    K_Nama VARCHAR(30)
+    K_Nama VARCHAR(30) NOT NULL,
+    K_Persentase_Kursi FLOAT(1,1) NOT NULL
 );
 
 CREATE SEQUENCE Jabatan_Kru_Pesawat_sq 

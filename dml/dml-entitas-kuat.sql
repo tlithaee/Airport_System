@@ -61,11 +61,11 @@ VALUES
     ('IDN012345678', 'Indonesia', '2023-08-31'),
     ('IDN456689012', 'Indonesia', '2024-01-31');
 
-INSERT INTO Kelas (K_ID, K_Nama)
+INSERT INTO Kelas (K_ID, K_Nama, K_Persentase_Kursi)
 VALUES
-    ('E', 'Economy'),
-    ('B', 'Business'),
-    ('F', 'FirstClass');
+    ('E', 'Economy', 0.7),
+    ('B', 'Business', 0.2),
+    ('F', 'FirstClass', 0.1);
 
 INSERT INTO Jabatan_Kru_Pesawat (J_Nama)
 VALUES
