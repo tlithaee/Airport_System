@@ -70,11 +70,6 @@ VALUES
 INSERT INTO Jabatan_Kru_Pesawat (J_ID, J_Nama)
 VALUES
     (1, 'Steward/Stewardess'),
-    (2, 'Purser'),
-    (3, 'Kopilot'),
-    (4, 'Pilot'),
-    (5, 'Engineer Penerbangan'),
-    (6, 'Pelayan Kabin'),
-    (7, 'Pengawas Keamanan'),
-    (8, 'Manajer Penerbangan'),
-    (9, 'Penyelia Kabin');
+    (2, 'Kopilot'),
+    (3, 'Pilot'),
+    (4, 'Pelayan Kabin');
