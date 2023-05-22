@@ -40,7 +40,8 @@ INCREMENT BY 1;
 CREATE TABLE model_pesawat (
     Mp_ID int primary key default nextval('Model_pesawat_sq'),
     Mp_Nama varchar(60) NOT NULL,
-    Mp_Manufacturer varchar(100) NOT NULL
+    Mp_Manufacturer varchar(100) NOT NULL,
+    Mp_Jumlah_Kursi int NOT NULL
 );
 
 CREATE SEQUENCE menu_paket_makanan_sq 
