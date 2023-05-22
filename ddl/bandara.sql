@@ -1,7 +1,0 @@
-CREATE TABLE bandara (
-	B_ID CHAR(3) NOT NULL PRIMARY KEY,
-	B_Nama VARCHAR(100),
-	B_Alamat VARCHAR(100),
-	B_Email VARCHAR(60),
-	B_No_Telp CHAR(15)
-);
