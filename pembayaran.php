@@ -44,7 +44,7 @@
 
 	<div class="card-body">
 			<div class="row">
-				<h5 class="p-2">Total Harga = </h5>
+				<h5 class="p-2 d-flex justify-content-center">Total Harga = </h5>
                 <h6 class="p-2 ">Credit/debit card number </h6>
                     <div class="input-group mb-3">
                         <input type="text" class="form-control" data-mask="0000 0000 0000 0000" placeholder="Card Number" aria-label="Username" aria-describedby="basic-addon1">
@@ -65,7 +65,7 @@
 			</div>
         </div>
             <div class="row">
-                <h6 class="p-2">Name on Card </h6>
+                <h6 class="p-2">Name on Card</h6>
                     <div class="input-group mb-3">
                         <input type="text" class="form-control" aria-label="Username" aria-describedby="basic-addon1">
                     </div>
@@ -78,14 +78,16 @@
         <div class="modal fade" id="passModal" tabindex="-1" aria-labelledby="ModalLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
-                    <div class="modal-header">
+                    <div class="modal-header d-flex justify-content-center">
                         <h1 class="modal-title fs-5" id="ModalLabel">Pembayaran Berhasil</h1>
                     </div>
                     <form method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>">
-                    <div class="modal-body">
-                        <div class="form-text">
-                        Kode Booking = 
-                        </div>
+
+                    <div class="modal-body d-flex justify-content-center">
+                        <h6 class="p-2">Kode Booking</h6>
+                            <div class="input-group mb-3">
+                                <input type="text" class="form-control" aria-label="Username" aria-describedby="basic-addon1">
+                            </div>
                     </div>
                     </form>
                 </div>
