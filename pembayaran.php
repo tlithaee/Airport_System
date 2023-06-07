@@ -10,7 +10,8 @@
 	<div class="card-header">
         <nav class="navbar">
             <div class="container-fluid">
-                <span class="navbar-brand mb-0 h1">Logo</span>
+                <img src="images/logo_tulisan.png" alt="logo" class="logo-image">
+                <img src="images/Male User.png" alt="logo" class="user-image">
             </div>
         </nav>
 	</div>
@@ -53,8 +54,6 @@
                             <input type="type" class="form-control" aria-label="Username" data-mask="000" placeholder="000" aria-describedby="basic-addon1">
                         </div>
                 </div>
-            
-                
                
                 <div class="d-flex align-items-end flex-column mb-3 mt-auto p-2" style="height: 200px;">
                     <nav>
@@ -65,11 +64,16 @@
                 <div class="modal fade" id="passModal" tabindex="-1" aria-labelledby="ModalLabel" aria-hidden="true">
                     <div class="modal-dialog">
                         <div class="modal-content">
-                            <div class="modal-header d-flex justify-content-center text-primary">
-                                <h1 class="modal-title fs-5 fw-bold" id="ModalLabel">Pembayaran Berhasil</h1>
+                            <div class="d-flex justify-content-center">
+                                <img src="images/Ok.png" alt="logo" class="check-image">
                             </div>
+                            
+                            <div class="modal-header d-flex justify-content-center text-primary">
+                                    <h1 class="modal-title fs-5 fw-bold" id="ModalLabel">Pembayaran Berhasil</h1>
+                            </div>
+                        
                             <form method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>">
-                                <div class="modal-body d-flex justify-content-center">
+                                <div class="modal-body d-flex">
                                     <h6 class="p-2 fw-bold">Kode Booking</h6>
                                         <div class="input-group mb-3">
                                             <input type="text" readonly class="form-control-plaintext" id="booking" value="08.01x31.12">

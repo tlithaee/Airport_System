@@ -10,6 +10,8 @@
 body{
     background: #2196F3;
     margin: 0 10px;
+    background-size: cover;
+    background-position: center;
 }
 
 .payment{
@@ -21,6 +23,22 @@ body{
     padding-top: 70px;
     border-radius: 5px;
     position: relative;
+}
+
+.logo-image {
+    width: 150px;
+    height: auto;
+}
+
+.user-image {
+    width: 40px;
+    height: auto;
+}
+
+.check-image {
+    width: 90px;
+    height: auto;
+    align-items: center;
 }
 
 .form .label{
