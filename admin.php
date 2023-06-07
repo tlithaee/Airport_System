@@ -87,10 +87,10 @@
                     <div class="card-body">
                         <div class="row justify-content-center">
                             <div class="col-md-6 text-center">
-                                <a href="atur_sekarang.php" class="btn btn-dark btn-circle">
+                                <a href="Kelola_Pemesanan.php" class="btn btn-dark btn-circle">
                                     <span class="btn-circle-text"><img src="flyicon.png" alt="Button 3" width="80" height="80"></span>
                                 </a>
-                                <p>Atur Sekarang</p>
+                                <p>Kelola Pemesanan</p>
                             </div>
                         </div>    
                     </div>
