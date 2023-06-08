@@ -60,12 +60,12 @@ CREATE TABLE bandara (
   B_Telepon VARCHAR(15) NOT NULL
 );
 
-INSERT INTO bandara (B_ID, B_Nama_Bandara, B_Lokasi, B_Email, B_Telepon) VALUES
-('CGK', 'Bandar Udara Internasional Soekarno-Hatta', 'Tangerang, Banten, Indonesia', 'contact.center@angkasapura2.co.id', '622155912648'),
-('SUB', 'Bandar Udara Internasional Juanda', 'Jalan Ir. Haji Juanda, Surabaya, Indonesia', 'cc172@ap1.co.id', '62312986200'),
-('JOG', 'Bandar Udara Internasional Adisucipto', 'Maguwoharjo, Daerah Istimewa Yogyakarta, Indonesia', 'humas.jog@ap1.co.id', '62274484261'),
-('BTJ', 'Bandar Udara Internasional Sultan Iskandar Muda', 'Blang Bintang, Aceh Besar, Indonesia', 'contact.center@angkasapura2.co.id', '6265121341'),
-('DPS', 'Bandar Udara Internasional Ngurah Rai', 'Kelurahan Tuban, Bali, Indonesia', 'cc172@ap1.co.id', '623619351011');
+INSERT INTO bandara (B_ID, B_Nama_Bandara, B_Lokasi, B_KodeKota, B_Email, B_Telepon) VALUES
+('CGK', 'Bandar Udara Internasional Soekarno-Hatta', 'Tangerang, Banten, Indonesia', 'JKT', 'contact.center@angkasapura2.co.id', '622155912648'),
+('SUB', 'Bandar Udara Internasional Juanda', 'Jalan Ir. Haji Juanda, Surabaya, Indonesia', 'SBY', 'cc172@ap1.co.id', '62312986200'),
+('JOG', 'Bandar Udara Internasional Adisucipto', 'Maguwoharjo, Daerah Istimewa Yogyakarta, Indonesia', 'YGY', 'humas.jog@ap1.co.id', '62274484261'),
+('BTJ', 'Bandar Udara Internasional Sultan Iskandar Muda', 'Blang Bintang, Aceh Besar, Indonesia', 'BTJ', 'contact.center@angkasapura2.co.id', '6265121341'),
+('DPS', 'Bandar Udara Internasional Ngurah Rai', 'Kelurahan Tuban, Bali, Indonesia', 'DPS', 'cc172@ap1.co.id', '623619351011');
 
 -- PESAWAT
 CREATE TABLE pesawat (
@@ -273,4 +273,3 @@ VALUES
     (2, 3, 3, 3),
     (1, 4, 4, 4),
     (0, 5, 5, 5);
-
