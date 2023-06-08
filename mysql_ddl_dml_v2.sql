@@ -56,6 +56,7 @@ CREATE TABLE bandara (
   B_ID CHAR(3) PRIMARY KEY,
   B_Nama_Bandara VARCHAR(100) NOT NULL,
   B_Lokasi VARCHAR(100) NOT NULL,
+  B_KodeKota VARCHAR(5) not null,
   B_Email VARCHAR(100) NOT NULL,
   B_Telepon VARCHAR(15) NOT NULL
 );
