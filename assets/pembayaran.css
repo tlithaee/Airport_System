@@ -8,14 +8,13 @@
 }
 
 body{
-    background: #2196F3;
-    margin: 0 10px;
+    background: linear-gradient(to right, #bde5ff, #ecdff1);
     background-size: cover;
     background-position: center;
 }
 
 .payment{
-    background: #f8f8f8;
+    background: #ffffff;
     max-width: 400px;
     margin: 80px auto;
     height: auto;
@@ -38,7 +37,16 @@ body{
 .check-image {
     width: 90px;
     height: auto;
+    margin-top: 20px;
     align-items: center;
+}
+
+.modal-content .check-image {
+  margin-top: 50px;
+}
+
+.booking {
+  margin-top: 50px;
 }
 
 .form .label{
@@ -79,33 +87,15 @@ body{
   padding: 12px;
   text-align: center;
   color: #f8f8f8;
-  border-radius: 5px;
   cursor: pointer;
+  width: 100px;
 }
- 
-.card {
-    border: 1px solid #ccc;
-    margin-top: 0px;
-}
-.card-title {
-    font-size: 4rem;
-    color: #ff0000;
-    text-shadow: 2px 2px #ccc;
-    margin-bottom: 1rem;
-}
-.card-header {
-    background-color: #2d8ac4;
-    padding: 1rem;
-}
-.btn {
-    font-size: 4rem;
-    width: 100px;
-    transition: transform 0.2s ease-in-out;
-}
+
 .btn:hover {
     transform: scale(1.1);
 }
 
+/* 
 @media screen and (max-width: 420px){
     .card-grp{
       flex-direction: column;
@@ -117,4 +107,4 @@ body{
     .btn{
       margin-top: 20px;
     }
-  }
+  } */
