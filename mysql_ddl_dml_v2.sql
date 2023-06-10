@@ -170,7 +170,7 @@ INSERT INTO kursi_pesawat (Ku_ID, Ku_Status_Reservasi, K_ID, Pe_ID) VALUES
 -- HARGA
 CREATE TABLE Harga (
     H_ID INT AUTO_INCREMENT PRIMARY KEY,
-    H_Harga DECIMAL(19, 4) NOT NULL,
+    H_Harga DECIMAL(19, 0) NOT NULL,
     K_ID CHAR(1) NOT NULL,
     Pn_ID INT NOT NULL,
     FOREIGN KEY (Pn_ID) REFERENCES Penerbangan(Pn_ID),
