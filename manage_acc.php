@@ -1,3 +1,15 @@
+<?php include("config.php"); ?>
+<?php
+session_start();
+$username = $_SESSION['username'];
+$sql = "SELECT * FROM pemesan WHERE Pm_Username = '$username'";
+$query = mysqli_query($db, $sql);
+while($row = mysqli_fetch_array($query)){
+    $name = $row['Pm_Nama'];
+    $notelp = $row['Pm_No_Telp'];
+    $email = $row['Pm_Email'];
+}
+?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -32,10 +44,12 @@
             <div class="space">
                 <div class="d-flex space">
                     <div class="d-flex align-items-center" style="width: 100px;">
-                        <label class="p-2 fs-7 fw-bold">Username</label>
+                        <label class='p-2 fs-7 fw-bold'>Username</label>
                     </div>
                     <div class="d-flex fs-7 fw-bold">
-                        <input type="text" readonly class="form-control-plaintext" id="usn" value=": Lita_ilysmv">
+                        <?php
+                        echo "<input type='text' readonly class='form-control-plaintext' id='usn' value=': $username'>";
+                        ?>
                     </div>
                 </div>
                 <div class="d-flex space">
@@ -43,7 +57,9 @@
                         <label class="p-2 fs-7 fw-bold">Nama</label>
                     </div>
                     <div class="d-flex fs-7 fw-bold">
-                        <input type="text" readonly class="form-control-plaintext" id="nama" value=": Yours Only">
+                        <?php
+                        echo "<input type='text' readonly class='form-control-plaintext' id='nama' value=': $name' >";
+                        ?>
                     </div>
                 </div>
                 <div class="d-flex space">
@@ -51,7 +67,9 @@
                         <label class="p-2 fs-7 fw-bold">No. Telp</label>
                     </div>
                     <div class="d-flex fs-7 fw-bold">
-                        <input type="text" readonly class="form-control-plaintext" id="notelp" value=": 0818xxxxxxxx">
+                        <?php
+                        echo "<input type='text' readonly class='form-control-plaintext' id='notelp' value=': $notelp' >";
+                        ?>
                     </div>
                 </div>   
                 <div class="d-flex space">
@@ -59,7 +77,9 @@
                         <label class="p-2 fs-7 fw-bold">Email</label>
                     </div>
                     <div class="d-flex fs-7 fw-bold">
-                        <input type="text" readonly class="form-control-plaintext" id="email" value=": lvmepls@gmail.com">
+                        <?php
+                        echo "<input type='text' readonly class='form-control-plaintext' id='email' value=': $email' >";
+                        ?>
                     </div>
                 </div>       
             </div>
