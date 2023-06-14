@@ -1,8 +1,7 @@
 <?php
     include("config.php");
     session_start();
-    $username = 'user1';
-    //$username = $_SESSION['username'];
+    $username = $_SESSION['username'];
     $sql = "SELECT * FROM pemesan WHERE Pm_Username = '$username'";
     $query = mysqli_query($db, $sql);
     while($row = mysqli_fetch_array($query)){
