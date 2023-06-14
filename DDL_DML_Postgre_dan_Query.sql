@@ -635,3 +635,118 @@ SELECT * FROM pg_indexes WHERE tablename = 'pemesan';
 CREATE INDEX idx_Ad_Username ON admin (Ad_Username);
 
 SELECT * FROM pg_indexes WHERE tablename = 'admin';
+
+-- procedure()
+
+-- 1. menambahkan foreign key pada tabel:
+
+-- 1.1 Membuat tabel 'Uji'
+CREATE TABLE uji_no1 (
+  u_id INTEGER PRIMARY KEY,
+  x_id char
+);
+
+-- 1.2 Membuat prosedur 'add_foreign_key'
+CREATE OR REPLACE PROCEDURE add_foreign_key(
+    table_name TEXT,
+    column_name TEXT,
+    foreign_table_name TEXT,
+    foreign_column_name TEXT,
+    constraint_name TEXT
+)
+LANGUAGE plpgsql
+AS $$
+BEGIN
+    EXECUTE format('ALTER TABLE %I ADD CONSTRAINT %I FOREIGN KEY (%I) REFERENCES %I(%I)', table_name, constraint_name, column_name, foreign_table_name, foreign_column_name);
+END;
+$$;
+
+CALL add_foreign_key('uji_no1', 'x_id', 'kursi_pesawat', 'ku_id', 'fk_new');
+
+-- 2. menghapus data dari baris
+
+CREATE TABLE uji_no2 (
+  u_id INTEGER PRIMARY KEY,
+  x_id char
+);
+
+INSERT INTO uji_no2 (u_id, x_id)
+VALUES (1, 'A'),
+       (2, 'B'),
+       (3, 'C');
+
+
+CREATE OR REPLACE PROCEDURE delete_rows(
+    table_name TEXT,
+    condition TEXT
+)
+LANGUAGE plpgsql
+AS $$
+BEGIN
+    EXECUTE format('DELETE FROM %I WHERE %s', table_name, condition);
+END;
+$$;
+
+CALL delete_rows('uji_no2', 'x_id = ''B''');
+
+-- 3. memperbarui data kolom
+
+CREATE OR REPLACE PROCEDURE update_column_value(
+    table_name TEXT,
+    column_name TEXT,
+    new_value TEXT,
+    condition TEXT
+)
+LANGUAGE plpgsql
+AS $$
+BEGIN
+    EXECUTE format('UPDATE %I SET %I = %L WHERE %s', table_name, column_name, new_value, condition);
+END;
+$$;
+
+CALL update_column_value('uji_no2', 'x_id', 'D', 'u_id = 1');
+
+select * from uji_no2;
+
+-- 4. menampilkan jumlah kursi yang tersedia di setiap pesawat:
+
+create or replace procedure jumlah_kursi()
+language plpgsql 
+as $$
+declare 
+    Pe_ID int;
+    modelPesawat_Nama varchar(60);
+  	Jumlah_Kursi_Tersedia int;
+    cursor_kursi cursor for
+        SELECT p.Pe_ID, mp.Mp_Nama, mp.Mp_Jumlah_Kursi - COUNT(kp.Ku_ID) AS Jumlah_Kursi_Tersedia
+		FROM pesawat p
+		JOIN model_pesawat mp ON p.Mp_ID = mp.Mp_ID
+		LEFT JOIN kursi_pesawat kp ON p.Pe_ID = kp.Pe_ID
+		GROUP BY p.Pe_ID, mp.Mp_Nama, mp.Mp_Jumlah_Kursi;
+    	rec RECORD;
+begin 
+    open cursor_kursi;
+    loop
+        fetch cursor_kursi into Pe_ID, modelPesawat_Nama, Jumlah_Kursi_Tersedia;
+        exit when not found;
+        raise notice 'Jumlah kursi dari model pesawat: % yang tersedia adalah: %', modelPesawat_Nama, Jumlah_Kursi_Tersedia;    
+    end loop;
+    close cursor_kursi;
+end;
+$$;
+
+call jumlah_kursi();
+
+-- 5. drop table
+
+CREATE OR REPLACE PROCEDURE drop_table(
+    table_name TEXT
+)
+LANGUAGE plpgsql
+AS $$
+BEGIN
+    EXECUTE format('DROP TABLE IF EXISTS %I', table_name);
+END;
+$$;
+
+CALL drop_table('uji_no2');
