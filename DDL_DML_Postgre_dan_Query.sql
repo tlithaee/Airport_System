@@ -765,3 +765,25 @@ END;
 $$;
 
 CALL drop_table('uji_no2');
+
+-- TRIGGER 1
+-- 1. Creating a trigger to generate a username for the Pemesan table
+CREATE OR REPLACE FUNCTION generate_username() RETURNS TRIGGER AS $$
+BEGIN
+    NEW.Pm_Username := LOWER(REPLACE(NEW.Pm_Nama, ' ', ''));
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Creating the trigger
+CREATE TRIGGER generate_username_trigger
+BEFORE INSERT ON Pemesan
+FOR EACH ROW
+EXECUTE FUNCTION generate_username();
+
+-- Menambahkan data ke tabel Pemesan
+INSERT INTO Pemesan (Pm_Nama, Pm_No_Telp, Pm_Email, Pm_Password)
+VALUES ('Wan Sabrina', '08123456789', 'john.doe@example.com', 'password');
+
+-- Menampilkan data yang telah dimasukkan
+SELECT * FROM Pemesan;
