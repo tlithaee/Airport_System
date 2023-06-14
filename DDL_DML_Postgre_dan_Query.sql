@@ -430,6 +430,7 @@ VALUES
   (1, 9, 9, 9),
   (0, 10, 10, 10);
   
+-- QUERY BIASA
 -- 1. Menampilkan jumlah kursi yang tersedia di setiap pesawat:
 SELECT p.Pe_ID, mp.Mp_Nama, mp.Mp_Jumlah_Kursi - COUNT(kp.Ku_ID) AS Jumlah_Kursi_Tersedia
 FROM pesawat p
@@ -442,7 +443,6 @@ SELECT jp.Jp_ID, COUNT(ti.Ti_ID) AS Jumlah_Tiket_Individu_Terjual
 FROM jadwal_penerbangan jp
 LEFT JOIN tiket_individual ti ON jp.Jp_ID = ti.Jp_ID
 GROUP BY jp.Jp_ID;
-
 
 -- 3. Menampilkan daftar penumpang yang melakukan penerbangan lebih dari sekali dalam satu bulan terakhir:
 SELECT p.P_ID, p.P_Nama, COUNT(DISTINCT jp.Jp_ID) AS Jumlah_Penerbangan
@@ -512,16 +512,6 @@ JOIN tiket_individual t ON r.R_ID = t.R_ID
 WHERE t.Jp_ID = j.Jp_ID
 GROUP BY k.K_Nama;
 
--- 10. 
-SELECT jadwal_penerbangan.Jp_Bandara_Tujuan AS Bandara,
-       COALESCE(SUM(Harga.H_Harga), 0) AS Total_Pendapatan
-FROM jadwal_penerbangan
-LEFT JOIN Penerbangan ON jadwal_penerbangan.Pn_ID = Penerbangan.Pn_ID
-LEFT JOIN Harga ON Penerbangan.Pn_ID = Harga.Pn_ID
-WHERE EXTRACT(MONTH FROM jadwal_penerbangan.Jp_Tanggal_Waktu_Departure) = 6
-      AND EXTRACT(YEAR FROM jadwal_penerbangan.Jp_Tanggal_Waktu_Departure) = 2023
-GROUP BY jadwal_penerbangan.Jp_Bandara_Tujuan;
-
 -- 10. Menghitung total pendapatan tiap bandara
 SELECT bandara.B_Nama, SUM(Harga.H_Harga) AS Total_Pendapatan
 FROM jadwal_penerbangan
@@ -529,3 +519,105 @@ JOIN bandara ON jadwal_penerbangan.B_ID = bandara.B_ID
 JOIN penerbangan ON jadwal_penerbangan.Pn_ID = penerbangan.Pn_ID
 JOIN Harga ON penerbangan.Pn_ID = Harga.Pn_ID
 GROUP BY bandara.B_Nama;
+
+-- VIEW
+-- 1. Menampilkan jumlah kursi yang tersedia di setiap pesawat:
+CREATE VIEW jumlah_kursi_tersedia AS
+SELECT p.Pe_ID, mp.Mp_Nama, mp.Mp_Jumlah_Kursi - COUNT(kp.Ku_ID) AS Jumlah_Kursi_Tersedia
+FROM pesawat p
+JOIN model_pesawat mp ON p.Mp_ID = mp.Mp_ID
+LEFT JOIN kursi_pesawat kp ON p.Pe_ID = kp.Pe_ID
+GROUP BY p.Pe_ID, mp.Mp_Nama, mp.Mp_Jumlah_Kursi;
+
+-- 2. Menampilkan jumlah tiket individu yang telah terjual untuk setiap penerbangan:
+CREATE VIEW jumlah_kursi_tersedia AS
+SELECT jp.Jp_ID, COUNT(ti.Ti_ID) AS Jumlah_Tiket_Individu_Terjual
+FROM jadwal_penerbangan jp
+LEFT JOIN tiket_individual ti ON jp.Jp_ID = ti.Jp_ID
+GROUP BY jp.Jp_ID;
+
+-- 3. Menampilkan daftar penumpang yang melakukan penerbangan lebih dari sekali dalam satu bulan terakhir:
+CREATE VIEW penumpang_lebih_dari_sekali AS
+SELECT p.P_ID, p.P_Nama, COUNT(DISTINCT jp.Jp_ID) AS Jumlah_Penerbangan
+FROM penumpang p
+JOIN tiket_individual ti ON p.P_ID = ti.P_ID
+JOIN jadwal_penerbangan jp ON ti.Jp_ID = jp.Jp_ID
+WHERE jp.Jp_Tanggal_Waktu_Departure BETWEEN CURRENT_DATE - INTERVAL '1 month' AND CURRENT_DATE
+GROUP BY p.P_ID, p.P_Nama
+HAVING COUNT(DISTINCT jp.Jp_ID) > 1;
+
+-- 4. Menampilkan rata-rata harga tiket per kelas untuk setiap penerbangan:
+CREATE VIEW rata_rata_harga_per_kelas AS
+SELECT jp.Jp_ID, k.K_Nama, AVG(h.H_Harga) AS Rata_Rata_Harga
+FROM jadwal_penerbangan jp
+JOIN penerbangan pn ON jp.Pn_ID = pn.Pn_ID
+JOIN kelas k ON pn.K_ID = k.K_ID
+JOIN harga h ON pn.Pn_ID = h.Pn_ID AND k.K_ID = h.K_ID
+GROUP BY jp.Jp_ID, k.K_Nama;
+
+-- 5. Menampilkan daftar pemesan yang belum melakukan pembayaran untuk reservasi mereka:
+CREATE VIEW pemesan_belum_bayar AS
+SELECT P.Pm_ID, P.Pm_Nama, P.Pm_No_Telp, P.Pm_Email, Sp.Sp_Nama_Status
+FROM Pemesan P
+JOIN Reservasi R ON P.Pm_ID = R.Pm_ID
+JOIN Pembayaran Pb ON R.Pb_ID = Pb.Pb_ID
+JOIN status_pembayaran Sp ON Pb.Sp_ID = Sp.Sp_ID
+WHERE Sp.Sp_Nama_Status = 'Gagal' OR Sp.Sp_Nama_Status = 'Pending';
+
+-- 6. Mengambil bandara dengan jumlah penerbangan terbanyak:
+CREATE VIEW bandara_jumlah_penerbangan AS
+SELECT B_ID, COUNT(Jp_ID) AS Jumlah_Penerbangan
+FROM jadwal_penerbangan
+GROUP BY B_ID
+HAVING COUNT(Jp_ID) = (
+    SELECT MAX(Jumlah_Penerbangan)
+    FROM (
+        SELECT COUNT(Jp_ID) AS Jumlah_Penerbangan
+        FROM jadwal_penerbangan
+        GROUP BY B_ID
+    ) AS T
+);
+
+-- 7. Menemukan pemesan dengan jumlah reservasi terbanyak:
+CREATE VIEW pemesan_jumlah_reservasi AS
+SELECT Pemesan.Pm_Nama, COUNT(*) AS Jumlah_Reservasi
+FROM Pemesan
+JOIN Reservasi ON Pemesan.Pm_ID = Reservasi.Pm_ID
+GROUP BY Pemesan.Pm_ID, Pemesan.Pm_Nama
+HAVING COUNT(*) = (
+    SELECT MAX(ReservasiCount)
+    FROM (
+        SELECT COUNT(*) AS ReservasiCount
+        FROM Reservasi
+        GROUP BY Pm_ID
+    ) AS SubQuery
+);
+
+-- 8. Mencari semua daftar admin beserta jumlah reservasi yang dilayaninya, termasuk admin yang tidak pernah melayani reservasi
+CREATE VIEW admin_jumlah_reservasi AS
+SELECT admin.Ad_Username, COUNT(reservasi.R_ID) AS Jumlah_Reservasi
+FROM admin
+LEFT JOIN reservasi ON admin.Ad_ID = reservasi.Ad_ID
+GROUP BY admin.Ad_Username;
+
+-- 9. menghitung total pendapatan dari tiket terjual berdasarkan kelas:
+CREATE VIEW pendapatan_per_kelas AS
+SELECT k.K_Nama AS Kelas, SUM(h.H_Harga) AS Total_Pendapatan
+FROM Harga h
+JOIN kelas k ON h.K_ID = k.K_ID
+JOIN jadwal_penerbangan j ON h.Pn_ID = j.Pn_ID
+JOIN reservasi r ON j.Pn_ID = r.Pn_ID
+JOIN tiket_individual t ON r.R_ID = t.R_ID
+WHERE t.Jp_ID = j.Jp_ID
+GROUP BY k.K_Nama;
+
+-- 10. Menghitung total pendapatan tiap bandara
+CREATE VIEW total_pendapatan_bandara AS
+SELECT bandara.B_Nama, SUM(Harga.H_Harga) AS Total_Pendapatan
+FROM jadwal_penerbangan
+JOIN bandara ON jadwal_penerbangan.B_ID = bandara.B_ID
+JOIN penerbangan ON jadwal_penerbangan.Pn_ID = penerbangan.Pn_ID
+JOIN Harga ON penerbangan.Pn_ID = Harga.Pn_ID
+GROUP BY bandara.B_Nama;
+
+SELECT* FROM total_pendapatan_bandara;
