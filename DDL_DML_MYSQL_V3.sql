@@ -1,5 +1,5 @@
-CREATE DATABASE fp_mbd;
-USE fp_mbd;
+CREATE DATABASE swiftAir;
+USE swiftAir;
 
 -- Membuat tabel Pemesan
 CREATE TABLE Pemesan (

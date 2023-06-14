@@ -3,7 +3,7 @@
 $servername = "localhost";
 $username = "root";
 $password = "";
-$dbname = "fp_mbd";
+$dbname = "swiftAir";
 
 $conn = new mysqli($servername, $username, $password, $dbname);
 if ($conn->connect_error) {

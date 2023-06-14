@@ -65,7 +65,7 @@
                 $servername = "localhost";
                 $username = "root";
                 $password = "";
-                $dbname = "fp_mbd";
+                $dbname = "swiftAir";
 
                 // Membuat koneksi
                 $conn = new mysqli($servername, $username, $password, $dbname);
@@ -101,7 +101,7 @@
                 $servername = "localhost";
                 $username = "root";
                 $password = "";
-                $dbname = "fp_mbd";
+                $dbname = "swiftAir";
 
                 // Membuat koneksi
                 $conn = new mysqli($servername, $username, $password, $dbname);
@@ -137,7 +137,7 @@
                 $servername = "localhost";
                 $username = "root";
                 $password = "";
-                $dbname = "fp_mbd";
+                $dbname = "swiftAir";
 
                 // Membuat koneksi
                 $conn = new mysqli($servername, $username, $password, $dbname);

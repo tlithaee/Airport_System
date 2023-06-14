@@ -8,7 +8,7 @@
     while($row = mysqli_fetch_array($query)){
         $pmid = $row['Pm_ID'];
     } 
-    $sql = "SELECT * FROM pemesan p JOIN reservasi r ON (p.Pm_ID = r.Pm_ID) JOIN jadwal_penerbangan jp ON (r.Pn_ID = jp.Pn_ID) WHERE p.Pm_ID = '$pmid'";
+    $sql = "SELECT * FROM reservasi r JOIN pemesan p ON (p.Pm_ID = r.Pm_ID) JOIN jadwal_penerbangan jp ON (r.Pn_ID = jp.Pn_ID) WHERE p.Pm_ID = '$pmid'";
     $query = mysqli_query($db, $sql);
     $date = date('m/d/Y h:i:s a', time());
 ?>

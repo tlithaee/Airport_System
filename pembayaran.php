@@ -1,15 +1,13 @@
 <?php
     include("config.php");
-    session_start();
-    $reservasi = 3;
-    $rid = 2;
-    //$reservasi = $_SESSION['r_id'] ;
-    $sql = "SELECT * FROM reservasi r JOIN harga h ON (h.Pn_ID = r.Pn_ID) WHERE R_ID = '$rid' AND h.K_ID = 'E';"; //belum sesuai, kurang k_id di reservasi
+    $rid = $_GET['reservation_id'];
+    $kid = $_GET['k_id'];
+    $sql = "SELECT * FROM reservasi r JOIN harga h ON (h.Pn_ID = r.Pn_ID) WHERE R_ID = '$rid' AND h.K_ID = '$kid';"; //belum sesuai, kurang k_id di reservasi
     $query = mysqli_query($db, $sql);
-    while($row = mysqli_fetch_array($query)){
-        $harga = $row['H_Harga'];
-    } 
+    $row = mysqli_fetch_array($query);
+    $harga = $row['H_Harga'];
 ?>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -42,6 +40,7 @@
 
     <main class="container">
         <form action="proses-pembayaran.php" method="POST">
+        <input type="hidden" name="rid" value="<?php echo $rid; ?>">
         <div class="payment">
             <div class="space">
                 <div class="d-flex space">

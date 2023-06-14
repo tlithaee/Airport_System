@@ -2,7 +2,7 @@
 $server = "localhost";
 $user = "root";
 $password = "";
-$nama_database = "fp_mbd";
+$nama_database = "swiftAir";
 
 $db = mysqli_connect($server, $user, $password, $nama_database);
 

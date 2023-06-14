@@ -13,7 +13,7 @@
         .container {
             margin-top: 20px;
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(800px, 1fr));
             grid-gap: 20px;
         }
     </style>
@@ -61,7 +61,7 @@
     $bandaraAsal = $_POST['dari'];
     $bandaraTujuan = $_POST['ke'];
     $kelas = $_POST['kelas'];
-    $totalpenumpang = $_POST['penumpang'];;
+    $totalpenumpang = $_POST['penumpang'];
 
     // First query to get Pn_ID and H_Harga for direct flights
     $query1_direct = "SELECT p.Pn_ID, h.H_Harga
@@ -81,6 +81,40 @@
         )";
     $result1_direct = mysqli_query($db, $query1_direct);
 
+    // Second query to get Pn_ID and H_Harga for flights with transit
+    $query1_transit = "SELECT DISTINCT p.Pn_ID, h.H_Harga
+        FROM Penerbangan p
+        JOIN Jadwal_Penerbangan jp1 ON jp1.Pn_ID = p.Pn_ID
+        JOIN Jadwal_Penerbangan jp2 ON jp2.Pn_ID = p.Pn_ID
+        JOIN Harga h ON h.Pn_ID = p.Pn_ID
+        JOIN kelas k ON k.K_ID = h.K_ID
+        WHERE (jp1.Jp_Bandara_Tujuan = jp2.Jp_Bandara_Asal
+        AND jp2.Jp_Bandara_Tujuan = '$bandaraTujuan')
+        AND DATE(jp1.Jp_Tanggal_Waktu_Departure) >= '$inputDateTime'
+        AND k.K_Nama = '$kelas'";
+    $result1_transit = mysqli_query($db, $query1_transit);
+
+    // Check if any flights were found
+    if (mysqli_num_rows($result1_direct) == 0 && mysqli_num_rows($result1_transit) == 0) {
+        // Display the "No Flights Found" message
+        echo '<div id="error-page">';
+        echo '   <div class="content">';
+        echo '      <h2 class="header" data-text="No Flights Found!">';
+        echo '         No Flights Found!';
+        echo '      </h2>';
+        echo '      <h4 data-text="❌✈❌">';
+        echo '         ❌✈❌';
+        echo '      </h4>';
+        echo '      <p>';
+        echo '         Apologies, no matching flights found. Return to dashboard?';
+        echo '      </p>';
+        echo '      <div class="btns">';
+        echo '         <a href="dashboard.php">Back to Dashboard</a>';
+        echo '      </div>';
+        echo '   </div>';
+        echo '</div>';
+    }
+
     // Check if the first query was successful
     if ($result1_direct) {
         // Display the result in a card format
@@ -88,8 +122,12 @@
     
         if (mysqli_num_rows($result1_direct) > 0) {
             while ($row1_direct = mysqli_fetch_assoc($result1_direct)) {
+                echo '<form action="book_flight.php" method="POST">';
                 $pnID = $row1_direct['Pn_ID'];
                 $harga = $row1_direct['H_Harga'];
+                echo '<input type="hidden" name="pnID" value="' . $pnID . '">';
+                echo '<input type="hidden" name="kelas" value="' . $kelas . '">';
+                echo '<input type="hidden" name="totalpenumpang" value="' . $totalpenumpang . '">';
     
                 // Second query to get the flight details for each Pn_ID
                 $query2_direct = "SELECT jp.Jp_Tanggal_Waktu_Departure, jp.Jp_Tanggal_Waktu_Arrival, jp.Jp_Bandara_Asal, jp.Jp_Bandara_Tujuan
@@ -140,10 +178,7 @@
                         echo '</div>';
                         echo '<div class="card-footer">';
                         echo '<div class="row">';
-                        echo '<div class="button-container">
-                        <button type="submit" name="submit" value="submit" class="btn btn-primary">Book</button>
-                    </div>';
-              
+                        echo '<div class="button-container"><button type="submit" name="booknow" class="btn btn-primary">Book Now</button></div>';
                         // echo '<button type="submit" name="submit" value="submit" class="btn btn-primary"> Book </button>';
                         echo '</div>';
                         echo '</div>';
@@ -161,45 +196,13 @@
                 } else {
                     echo "Error executing the second query: " . mysqli_error($db);
                 }
+                echo '</form>';
             }
-        } else {
-            // Display the "Tidak ada jadwal" message
-            echo '<div id="error-page">';
-            echo '   <div class="content">';
-            echo '      <h2 class="header" data-text="No Flights Found!">';
-            echo '         No Flights Found!';
-            echo '      </h2>';
-            echo '      <h4 data-text="❌✈❌">';
-            echo '         ❌✈❌';
-            echo '      </h4>';
-            echo '      <p>';
-            echo '         Apologies, no matching flights found. Return to dashboard?';
-            echo '      </p>';
-            echo '      <div class="btns">';
-            echo '         <a href="dashboard.php">Back to Dashboard</a>';
-            echo '      </div>';
-            echo '   </div>';
-            echo '</div>';
-            
-        }
-    
+        } 
         echo '</div>'; // Close the container
     } else {
         echo "Error executing the first query: " . mysqli_error($db);
     }
-
-    // Second query to get Pn_ID and H_Harga for flights with transit
-    $query1_transit = "SELECT DISTINCT p.Pn_ID, h.H_Harga
-        FROM Penerbangan p
-        JOIN Jadwal_Penerbangan jp1 ON jp1.Pn_ID = p.Pn_ID
-        JOIN Jadwal_Penerbangan jp2 ON jp2.Pn_ID = p.Pn_ID
-        JOIN Harga h ON h.Pn_ID = p.Pn_ID
-        JOIN kelas k ON k.K_ID = h.K_ID
-        WHERE (jp1.Jp_Bandara_Tujuan = jp2.Jp_Bandara_Asal
-        AND jp2.Jp_Bandara_Tujuan = '$bandaraTujuan')
-        AND DATE(jp1.Jp_Tanggal_Waktu_Departure) >= '$inputDateTime'
-        AND k.K_Nama = '$kelas'";
-    $result1_transit = mysqli_query($db, $query1_transit);
 
     // Check if the first query was successful
     if ($result1_transit) {
@@ -207,8 +210,12 @@
         echo '<div class="container">';
 
         while ($row1_transit = mysqli_fetch_assoc($result1_transit)) {
+            echo '<form action="book_flight.php" method="POST">';
             $pnID = $row1_transit['Pn_ID'];
             $harga = $row1_transit['H_Harga'];
+            echo '<input type="hidden" name="pnID" value="' . $pnID . '">';
+            echo '<input type="hidden" name="kelas" value="' . $kelas . '">';
+            echo '<input type="hidden" name="totalpenumpang" value="' . $totalpenumpang . '">';
 
             // Second query to get the flight details for each Pn_ID
             $query2_transit = "SELECT jp.Jp_Tanggal_Waktu_Departure, jp.Jp_Tanggal_Waktu_Arrival, jp.Jp_Bandara_Asal, jp.Jp_Bandara_Tujuan
@@ -220,51 +227,53 @@
             if ($result2_transit) {
                 // Display the flight details
                 echo '<div class="card">';
-                echo '<div class="card-header">';
+                echo '<div class="card-header custom-card-header">';
                 echo '<div class="row">';
-                echo '<div class="col-md-4"> <p class="h4">Asal</p> </div>';
-                echo '<div class="col-md-4"> <p class="h4">Tujuan</p> </div>';
-                echo '<div class="col-md-4"> <p class="h4">Harga</p> </div>';
+                echo '<div class="col-md-4"> <p class="h4 custom-class">Asal</p> </div>';
+                echo '<div class="col-md-4"> <p class="h4 custom-class">Tujuan</p> </div>';
+                echo '<div class="col-md-4"> <p class="h4 custom-class">Harga</p> </div>';
                 echo '</div>';
                 echo '<div class="row">';
-                echo '<div class="col-md-4">' . $bandaraAsal . '</div>';
-                echo '<div class="col-md-4">' . $bandaraTujuan . '</div>';
-                echo '<div class="col-md-4">' . $harga . '</div>';
+                echo '<div class="col-md-4"><p class="h7">' . $bandaraAsal . '</p></div>';
+                echo '<div class="col-md-4"><p class="h7">' . $bandaraTujuan . '</p></div>';
+                echo '<div class="col-md-2"><p class="h7">' . $kelas . '</p></div>';
+                echo '<div class="col-md-2"><p class="h7">' . $harga . '</p></div>';
                 echo '</div>';
                 echo '</div>';
                 echo '<div class="card-body">';
                 while ($row2_transit = mysqli_fetch_assoc($result2_transit)) {
-                    echo '<div class="custom-card">';
+                    echo '<div class="card">';
                     echo '<div class="row">';
                     echo '<div class="col-md-6"> <p class="h4">Asal</p> </div>';
                     echo '<div class="col-md-6"> <p class="h4">Tujuan</p> </div>';
                     echo '</div>';
                     echo '<div class="row">';
-                    echo '<div class="col-md-6">' . $row2_transit['Jp_Bandara_Asal'] . '</div>';
-                    echo '<div class="col-md-6">' . $row2_transit['Jp_Bandara_Tujuan'] . '</div>';
+                    echo '<div class="col-md-6"><p class="h72">' . $row2_transit['Jp_Bandara_Asal'] . '</p></div>';
+                    echo '<div class="col-md-6"><p class="h72">' . $row2_transit['Jp_Bandara_Tujuan'] . '</p></div>';
                     echo '</div>';
                     echo '<div class="row">';
                     echo '<div class="col-md-6"> <p class="h4">Waktu Keberangkatan</p> </div>';
                     echo '<div class="col-md-6"> <p class="h4">Waktu Sampai</p> </div>';
                     echo '</div>';
                     echo '<div class="row">';
-                    echo '<div class="col-md-6">' . $row2_transit['Jp_Tanggal_Waktu_Departure'] . '</div>';
-                    echo '<div class="col-md-6">' . $row2_transit['Jp_Tanggal_Waktu_Arrival'] . '</div>';
+                    echo '<div class="col-md-6"><p class="h72">' . $row2_transit['Jp_Tanggal_Waktu_Departure'] . '</p></div>';
+                    echo '<div class="col-md-6"><p class="h72">' . $row2_transit['Jp_Tanggal_Waktu_Arrival'] . '</p></div>';
                     echo '</div>';
                     echo '</div>';
                 }
                 echo '</div>';
                 echo '<div class="card-footer">';
                 echo '<div class="row">';
-                echo '<button type="submit" name="submit" value="submit" class="btn btn-primary"> Book </button>';
+                echo '<div class="button-container"><button type="submit" name="booknow" class="btn btn-primary">Book Now</button></div>';
+                // echo '<button type="submit" name="submit" value="submit" class="btn btn-primary"> Book </button>';
                 echo '</div>';
                 echo '</div>';
                 echo '</div>';
             } else {
                 echo "Error executing the second query: " . mysqli_error($db);
             }
+            echo '</form>';
         }
-
         echo '</div>'; // Close the container
     } else {
         echo "Error executing the first query: " . mysqli_error($db);
