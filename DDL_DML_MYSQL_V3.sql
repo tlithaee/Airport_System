@@ -76,7 +76,7 @@ CREATE TABLE bandara (
   B_Telepon VARCHAR(15) NOT NULL
 );
 
-INSERT INTO bandara
+INSERT INTO bandara (B_ID, B_Nama_Bandara, B_Lokasi, B_Email, B_Telepon)
 VALUES
 ('CGK', 'Bandar Udara Internasional Soekarno–Hatta', 'Tangerang, Banten, Indonesia', 'contact.center@angkasapura2.co.id', '622155912648'),
 ('SUB', 'Bandar Udara Internasional Juanda', 'Jalan Ir. Haji Juanda, Surabaya, Indonesia', 'cc172@ap1.co.id', '62312986200'),
@@ -88,6 +88,7 @@ VALUES
 ('SRG', 'Bandar Udara Internasional Adi Sumarmo', 'Colomadu, Karanganyar, Jawa Tengah, Indonesia', 'ccsrg@inaca.co.id', '622712210005'),
 ('UPG', 'Bandar Udara Internasional Sultan Hasanuddin', 'Maros, Sulawesi Selatan, Indonesia', 'cc172@ap1.co.id', '62411966444'),
 ('PKU', 'Bandar Udara Internasional Sultan Syarif Kasim II', 'Pekanbaru, Riau, Indonesia', 'pku@ap1.co.id', '6281247029596');
+
 
 -- PESAWAT
 CREATE TABLE pesawat (
