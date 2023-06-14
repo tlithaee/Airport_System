@@ -18,11 +18,11 @@ if(isset($_POST['submit'])){
 
     // apakah query simpan berhasil?
     if( $query ) {
-        // ambil Pm_Id yang baru saja ditambahkan
-        $pmId = mysqli_insert_id($db);
+        // ambil Pb_Id yang baru saja ditambahkan
+        $pbId = mysqli_insert_id($db);
 
-        // buat query untuk memperbarui Pm_Id di tabel reservasi
-        $updateSql = "UPDATE reservasi SET Pm_Id = '$pmId' WHERE R_ID = '$rid'";
+        // buat query untuk memperbarui Pb_Id di tabel reservasi
+        $updateSql = "UPDATE reservasi SET Pb_Id = '$pbId' WHERE R_ID = '$rid'";
         $updateQuery = mysqli_query($db, $updateSql);
 
         // apakah query update berhasil?
