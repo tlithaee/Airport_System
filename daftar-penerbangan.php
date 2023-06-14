@@ -23,7 +23,7 @@
 <body>
 <header>
     <span class="image-clickable">
-      <a href="index.php">
+      <a href="dashboard.php">
         <img src="./assets/images/logo_tulisan.png" alt="main-logo" class="logo" />
       </a>
     </span>

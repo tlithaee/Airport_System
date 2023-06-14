@@ -28,6 +28,7 @@ VALUES
   ('user8', 'Sophia Johnson', '123123123', 'sophia.johnson@example.com', 'password8'),
   ('user9', 'Leonardo Da Vinci', '456456456', 'monalisa.cintaq@example.com', 'password9'),
   ('user10', 'Olivia Thomas', '789789789', 'olivia.thomas@example.com', 'password10');
+  
 -- Membuat sequence untuk tabel model_pesawat
 CREATE SEQUENCE model_pesawat_sq
 MINVALUE 1 
@@ -396,7 +397,6 @@ VALUES
   (9, '2023-06-18', 9, 1, 9, 9),
   (10, '2023-06-19', 10, 1, 10, 10);
 
-
 -- Membuat sequence untuk tabel Tiket_Individual
 CREATE SEQUENCE tiket_individual_sq
 MINVALUE 1 
@@ -620,4 +620,31 @@ JOIN penerbangan ON jadwal_penerbangan.Pn_ID = penerbangan.Pn_ID
 JOIN Harga ON penerbangan.Pn_ID = Harga.Pn_ID
 GROUP BY bandara.B_Nama;
 
-SELECT* FROM total_pendapatan_bandara;
+-- INDEXING bandara
+CREATE INDEX idx_B_ID_CGK ON bandara (B_ID) WHERE B_ID = 'CGK';
+
+CREATE INDEX idx_B_ID ON bandara (B_ID);
+
+EXPLAIN SELECT * FROM bandara WHERE B_ID = 'CGK';
+
+SELECT * FROM pg_indexes WHERE tablename = 'bandara';
+
+SELECT * FROM bandara WHERE B_ID = 'CGK';
+
+DROP INDEX IF EXISTS idx_bandara_b_id;
+
+-- INDEXING model_pesawat
+CREATE INDEX idx_Mp_Nama ON model_pesawat (Mp_Nama);
+
+SELECT * FROM pg_indexes WHERE tablename = 'model_pesawat';
+
+-- INDEXING pemesan
+CREATE INDEX idx_Pm_Nama ON pemesan (Pm_Nama);
+
+SELECT * FROM pg_indexes WHERE tablename = 'pemesan';
+
+-- INDEXING admin
+CREATE INDEX idx_Ad_Username ON admin (Ad_Username);
+
+SELECT * FROM pg_indexes WHERE tablename = 'admin';
+

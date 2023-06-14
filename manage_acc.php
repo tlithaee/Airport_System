@@ -26,7 +26,7 @@ while($row = mysqli_fetch_array($query)){
 <body>
     <nav class="navbar shadow p-3 mb-5 bg-body-tertiary">
         <div class="container-fluid">
-            <a class="navbar-brand" href="index.php">
+            <a class="navbar-brand" href="dashboard.php">
                 <img src="images/logo_tulisan.png" alt="logo" class="logo-image">
             </a>
             <a class="navbar-brand" href="manage_acc.php">

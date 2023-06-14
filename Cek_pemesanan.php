@@ -11,7 +11,7 @@
 <body>
 	<nav class="navbar">
         <div class="container-fluid">
-            <img src="images/logo_tulisan.png" alt="logo" class="logo-image" style="width: 150px; height: auto;">
+            <img src="images/logo_tulisan.png" alt="logo" href="dashboard.php" class="logo-image" style="width: 150px; height: auto;">
         </div>
     </nav>	
 	<div class="container">
