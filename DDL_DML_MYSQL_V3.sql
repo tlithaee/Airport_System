@@ -255,7 +255,7 @@ values
 (45000000, 'F', 5),
 (5000000, 'E', 6),
 (20000000, 'F', 6),
-(10000000, 'B', 6),
+(10000000, 'B', 6);
 
 -- JADWAL PENERBANGAN
 CREATE TABLE jadwal_penerbangan (
