@@ -444,22 +444,16 @@ FROM jadwal_penerbangan jp
 LEFT JOIN tiket_individual ti ON jp.Jp_ID = ti.Jp_ID
 GROUP BY jp.Jp_ID;
 
--- 3. Menampilkan daftar penumpang yang melakukan penerbangan lebih dari sekali dalam satu bulan terakhir:
-SELECT p.P_ID, p.P_Nama, COUNT(DISTINCT jp.Jp_ID) AS Jumlah_Penerbangan
-FROM penumpang p
-JOIN tiket_individual ti ON p.P_ID = ti.P_ID
-JOIN jadwal_penerbangan jp ON ti.Jp_ID = jp.Jp_ID
-WHERE jp.Jp_Tanggal_Waktu_Departure BETWEEN CURRENT_DATE - INTERVAL '1 month' AND CURRENT_DATE
-GROUP BY p.P_ID, p.P_Nama
-HAVING COUNT(DISTINCT jp.Jp_ID) > 1;
+-- 3. Tampilkan daftar jadwal penerbangan yang memiliki penerbangan tujuan ke "Bandar Udara Internasional Soekarno-Hatta" (Jakarta):
+SELECT jp.Jp_ID, jp.Jp_Tanggal_Waktu_Departure, jp.Jp_Tanggal_Waktu_Arrival, jp.Jp_Bandara_Asal, jp.Jp_Bandara_Tujuan
+FROM jadwal_penerbangan jp
+WHERE jp.Jp_Bandara_Tujuan = 'Bandar Udara Internasional Soekarno-Hatta';
 
 -- 4. Menampilkan rata-rata harga tiket per kelas untuk setiap penerbangan:
-SELECT jp.Jp_ID, k.K_Nama, AVG(h.H_Harga) AS Rata_Rata_Harga
-FROM jadwal_penerbangan jp
-JOIN penerbangan pn ON jp.Pn_ID = pn.Pn_ID
-JOIN kelas k ON pn.K_ID = k.K_ID
-JOIN harga h ON pn.Pn_ID = h.Pn_ID AND k.K_ID = h.K_ID
-GROUP BY jp.Jp_ID, k.K_Nama;
+SELECT k.K_Nama AS Kelas, TRUNC(AVG(CAST(h.H_Harga AS NUMERIC)), 0) AS RataRataHarga
+FROM kelas k
+JOIN Harga h ON k.K_ID = h.K_ID
+GROUP BY k.K_Nama;
 
 -- 5. Menampilkan daftar pemesan yang belum melakukan pembayaran untuk reservasi mereka:
 SELECT P.Pm_ID, P.Pm_Nama, P.Pm_No_Telp, P.Pm_Email, Sp.Sp_Nama_Status
@@ -536,24 +530,18 @@ FROM jadwal_penerbangan jp
 LEFT JOIN tiket_individual ti ON jp.Jp_ID = ti.Jp_ID
 GROUP BY jp.Jp_ID;
 
--- 3. Menampilkan daftar penumpang yang melakukan penerbangan lebih dari sekali dalam satu bulan terakhir:
-CREATE VIEW penumpang_lebih_dari_sekali AS
-SELECT p.P_ID, p.P_Nama, COUNT(DISTINCT jp.Jp_ID) AS Jumlah_Penerbangan
-FROM penumpang p
-JOIN tiket_individual ti ON p.P_ID = ti.P_ID
-JOIN jadwal_penerbangan jp ON ti.Jp_ID = jp.Jp_ID
-WHERE jp.Jp_Tanggal_Waktu_Departure BETWEEN CURRENT_DATE - INTERVAL '1 month' AND CURRENT_DATE
-GROUP BY p.P_ID, p.P_Nama
-HAVING COUNT(DISTINCT jp.Jp_ID) > 1;
+-- 3. Tampilkan daftar jadwal penerbangan yang memiliki penerbangan tujuan ke "Bandar Udara Internasional Soekarno-Hatta" (Jakarta):
+CREATE VIEW jadwal_penerbangan_ke_soehatta AS
+SELECT jp.Jp_ID, jp.Jp_Tanggal_Waktu_Departure, jp.Jp_Tanggal_Waktu_Arrival, jp.Jp_Bandara_Asal, jp.Jp_Bandara_Tujuan
+FROM jadwal_penerbangan jp
+WHERE jp.Jp_Bandara_Tujuan = 'Bandar Udara Internasional Soekarno-Hatta';
 
 -- 4. Menampilkan rata-rata harga tiket per kelas untuk setiap penerbangan:
 CREATE VIEW rata_rata_harga_per_kelas AS
-SELECT jp.Jp_ID, k.K_Nama, AVG(h.H_Harga) AS Rata_Rata_Harga
-FROM jadwal_penerbangan jp
-JOIN penerbangan pn ON jp.Pn_ID = pn.Pn_ID
-JOIN kelas k ON pn.K_ID = k.K_ID
-JOIN harga h ON pn.Pn_ID = h.Pn_ID AND k.K_ID = h.K_ID
-GROUP BY jp.Jp_ID, k.K_Nama;
+SELECT k.K_Nama AS Kelas, TRUNC(AVG(CAST(h.H_Harga AS NUMERIC)), 0) AS RataRataHarga
+FROM kelas k
+JOIN Harga h ON k.K_ID = h.K_ID
+GROUP BY k.K_Nama;
 
 -- 5. Menampilkan daftar pemesan yang belum melakukan pembayaran untuk reservasi mereka:
 CREATE VIEW pemesan_belum_bayar AS
@@ -647,4 +635,3 @@ SELECT * FROM pg_indexes WHERE tablename = 'pemesan';
 CREATE INDEX idx_Ad_Username ON admin (Ad_Username);
 
 SELECT * FROM pg_indexes WHERE tablename = 'admin';
-
