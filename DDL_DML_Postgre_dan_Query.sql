@@ -785,6 +785,9 @@ EXECUTE FUNCTION generate_username();
 INSERT INTO Pemesan (Pm_Nama, Pm_No_Telp, Pm_Email, Pm_Password)
 VALUES ('Wan Sabrina', '08123456789', 'john.doe@example.com', 'password');
 
+-- Menampilkan data yang telah dimasukkan
+SELECT * FROM Pemesan;
+
 -- FUNCTION
 -- 1. Menampilkan jumlah kursi yang tidak tersedia di setiap pesawat:
 CREATE OR REPLACE function kursi_terisi()
@@ -880,6 +883,3 @@ JOIN Reservasi R ON P.Pm_ID = R.Pm_ID
 JOIN Pembayaran Pb ON R.Pb_ID = Pb.Pb_ID
 JOIN status_pembayaran Sp ON Pb.Sp_ID = Sp.Sp_ID
 WHERE Sp.Sp_Nama_Status = 'Berhasil';
-
--- Menampilkan data yang telah dimasukkan
-SELECT * FROM Pemesan;
