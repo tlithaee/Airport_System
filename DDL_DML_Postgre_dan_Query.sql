@@ -785,5 +785,101 @@ EXECUTE FUNCTION generate_username();
 INSERT INTO Pemesan (Pm_Nama, Pm_No_Telp, Pm_Email, Pm_Password)
 VALUES ('Wan Sabrina', '08123456789', 'john.doe@example.com', 'password');
 
+-- FUNCTION
+-- 1. Menampilkan jumlah kursi yang tidak tersedia di setiap pesawat:
+CREATE OR REPLACE function kursi_terisi()
+RETURNS TABLE (
+    Pe_ID INT,
+    Mp_Nama VARCHAR(50),
+    kursi_terisi BIGINT
+)
+AS
+$$
+BEGIN
+    RETURN QUERY
+	SELECT p.Pe_ID, mp.Mp_Nama, COUNT(kp.Ku_ID) AS Jumlah_Kursi_Terisi
+	FROM pesawat p
+	JOIN model_pesawat mp ON p.Mp_ID = mp.Mp_ID
+	LEFT JOIN kursi_pesawat kp ON p.Pe_ID = kp.Pe_ID
+	GROUP BY p.Pe_ID, mp.Mp_Nama, mp.Mp_Jumlah_Kursi;
+	END;
+$$
+LANGUAGE plpgsql;
+
+SELECT * FROM kursi_terisi();
+
+DROP FUNCTION kursi_terisi()
+
+-- Query 1
+SELECT p.Pe_ID, mp.Mp_Nama, COUNT(kp.Ku_ID) AS Jumlah_Kursi_Terisi
+FROM pesawat p
+JOIN model_pesawat mp ON p.Mp_ID = mp.Mp_ID
+LEFT JOIN kursi_pesawat kp ON p.Pe_ID = kp.Pe_ID
+GROUP BY p.Pe_ID, mp.Mp_Nama, mp.Mp_Jumlah_Kursi;
+
+-- 2. Menampilkan jumlah lokasi tujuan yang banyak dipilih
+CREATE OR REPLACE function banyak_tujuan()
+RETURNS TABLE (
+    D_Lokasi_Tujuan CHAR(3),
+    banyak_tujuan BIGINT
+)
+AS
+$$
+BEGIN
+    RETURN QUERY
+	SELECT d.D_Lokasi_Tujuan, COUNT(*) AS Jumlah
+	FROM destinasi d
+	GROUP BY d.D_Lokasi_Tujuan
+	ORDER BY Jumlah desc;
+	END;
+$$
+LANGUAGE plpgsql;
+
+SELECT * FROM banyak_tujuan();
+
+DROP FUNCTION banyak_tujuan()
+
+-- Query 2
+SELECT d.D_Lokasi_Tujuan, COUNT(*) AS Jumlah
+FROM destinasi d
+GROUP BY D_Lokasi_Tujuan
+ORDER BY Jumlah desc;
+
+-- 3. Menampilkan daftar pemesan yang sudah melakukan pembayaran
+CREATE OR REPLACE FUNCTION sudah_bayar()
+RETURNS TABLE (
+    Pm_ID INT,
+    Pm_Nama VARCHAR(60),
+    Pm_No_Telp CHAR(15),
+    Pm_Email VARCHAR(30),
+    Sp_Nama_Status VARCHAR(10),
+    sudah_bayar TEXT
+)
+AS
+$$
+BEGIN
+    RETURN QUERY
+    SELECT P.Pm_ID, P.Pm_Nama, P.Pm_No_Telp, P.Pm_Email, Sp.Sp_Nama_Status, 'Sudah Bayar'
+    FROM Pemesan P
+    JOIN Reservasi R ON P.Pm_ID = R.Pm_ID
+    JOIN Pembayaran Pb ON R.Pb_ID = Pb.Pb_ID
+    JOIN status_pembayaran Sp ON Pb.Sp_ID = Sp.Sp_ID
+    WHERE Sp.Sp_Nama_Status = 'Berhasil';
+END;
+$$
+LANGUAGE plpgsql;
+
+SELECT * FROM sudah_bayar();
+
+DROP FUNCTION sudah_bayar()
+
+-- Query 3
+SELECT P.Pm_ID, P.Pm_Nama, P.Pm_No_Telp, P.Pm_Email, Sp.Sp_Nama_Status
+FROM Pemesan P
+JOIN Reservasi R ON P.Pm_ID = R.Pm_ID
+JOIN Pembayaran Pb ON R.Pb_ID = Pb.Pb_ID
+JOIN status_pembayaran Sp ON Pb.Sp_ID = Sp.Sp_ID
+WHERE Sp.Sp_Nama_Status = 'Berhasil';
+
 -- Menampilkan data yang telah dimasukkan
 SELECT * FROM Pemesan;
