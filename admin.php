@@ -45,7 +45,7 @@
                     <div class="card-body">
                         <div class="row justify-content-center">
                             <div class="col-md-6 text-center">
-                                <a href="Kelola_Pemesanan.php" class="btn btn-dark btn-circle">
+                                <a href="Cek_pemesanan.php" class="btn btn-dark btn-circle">
                                     <span class="btn-circle-text"><img src="images/flyicon.png" alt="Button 3" width="80" height="80"></span>
                                 </a>
                                 <p>Cek Pemesanan</p>
