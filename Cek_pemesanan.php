@@ -36,8 +36,7 @@
 						JOIN Pemesan ON Reservasi.Pm_ID = Pemesan.Pm_ID
 						JOIN Penerbangan ON Penerbangan.Pn_ID = Reservasi.Pn_ID
 						JOIN Jadwal_Penerbangan ON Penerbangan.Pn_ID = Jadwal_Penerbangan.Pn_ID
-						JOIN Harga_penerbangan ON Harga_penerbangan.Pn_ID = Penerbangan.Pn_ID
-						JOIN Harga ON Harga_penerbangan.H_ID = Harga.H_ID
+						JOIN Harga ON Harga.Pn_ID = Penerbangan.Pn_ID
 						JOIN Kelas ON Harga.K_ID = Kelas.K_ID";
 						
 						
