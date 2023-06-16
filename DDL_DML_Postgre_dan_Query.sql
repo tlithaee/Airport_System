@@ -788,6 +788,55 @@ VALUES ('Wan Sabrina', '08123456789', 'john.doe@example.com', 'password');
 -- Menampilkan data yang telah dimasukkan
 SELECT * FROM Pemesan;
 
+-- TRIGGER 2
+-- Trigger untuk memastikan tanggal kedatangan lebih besar dari tanggal keberangkatan
+CREATE OR REPLACE FUNCTION validate_jadwal_penerbangan()
+  RETURNS TRIGGER AS $$
+BEGIN
+  IF NEW.Jp_Tanggal_Waktu_Arrival <= NEW.Jp_Tanggal_Waktu_Departure THEN
+    RAISE EXCEPTION 'Tanggal kedatangan harus lebih besar dari tanggal keberangkatan';
+  END IF;
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Membuat trigger
+CREATE TRIGGER trigger_validate_jadwal_penerbangan
+BEFORE INSERT OR UPDATE ON jadwal_penerbangan
+FOR EACH ROW
+EXECUTE FUNCTION validate_jadwal_penerbangan();
+
+-- Menampilkan daftar trigger yang ada di database
+SELECT * FROM information_schema.triggers WHERE trigger_name = 'trigger_validate_jadwal_penerbangan';
+
+-- TRIGER 3 Menghapus data pada tabel Pemesan saat menghapus data pada tabel Penumpang
+CREATE OR REPLACE FUNCTION delete_pemesan()
+RETURNS TRIGGER AS $$
+BEGIN
+  DELETE FROM Pemesan WHERE Pm_ID = OLD.P_ID;
+  RETURN OLD;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER trigger_delete_pemesan
+AFTER DELETE ON Penumpang
+FOR EACH ROW
+EXECUTE FUNCTION delete_pemesan();
+
+-- Trigger 4: Menghapus data pada tabel kursi_pesawat saat menghapus data pada tabel Pesawat
+CREATE OR REPLACE FUNCTION delete_kursi_pesawat()
+RETURNS TRIGGER AS $$
+BEGIN
+  DELETE FROM kursi_pesawat WHERE Pe_ID = OLD.Pe_ID;
+  RETURN OLD;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER trigger_delete_kursi_pesawat
+AFTER DELETE ON Pesawat
+FOR EACH ROW
+EXECUTE FUNCTION delete_kursi_pesawat();
+
 -- FUNCTION
 -- 1. Menampilkan jumlah kursi yang tidak tersedia di setiap pesawat:
 CREATE OR REPLACE function kursi_terisi()
