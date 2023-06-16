@@ -1,3 +1,4 @@
+<?php include("config.php"); ?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -61,23 +62,10 @@
               <label for="dari" class="formbold-form-label"> Dari </label>
               <select class="formbold-form-input" name="dari" id="dari" onchange="submitForm()">
                 <?php
-                // Koneksi ke database
-                $servername = "localhost";
-                $username = "root";
-                $password = "";
-                $dbname = "swiftAir";
-
-                // Membuat koneksi
-                $conn = new mysqli($servername, $username, $password, $dbname);
-
-                // Memeriksa koneksi
-                if ($conn->connect_error) {
-                  die("Koneksi gagal: " . $conn->connect_error);
-                }
 
                 // Mengambil data dari kolom D_Lokasi_Asal dalam tabel destinasi
                 $sql_asal = "SELECT DISTINCT B_Nama_Bandara FROM bandara";
-                $result_asal = $conn->query($sql_asal);
+                $result_asal = $db->query($sql_asal);
 
                 // Membuat opsi dropdown dari hasil query D_Lokasi_Asal
                 if ($result_asal->num_rows > 0) {
@@ -97,22 +85,8 @@
               <label for="ke" class="formbold-form-label"> Ke </label>
               <select class="formbold-form-input" name="ke" id="ke" onchange="submitForm()">
                 <?php
-                // Koneksi ke database
-                $servername = "localhost";
-                $username = "root";
-                $password = "";
-                $dbname = "swiftAir";
-
-                // Membuat koneksi
-                $conn = new mysqli($servername, $username, $password, $dbname);
-
-                // Memeriksa koneksi
-                if ($conn->connect_error) {
-                  die("Koneksi gagal: " . $conn->connect_error);
-                }
-
                 $sql_tujuan = "SELECT DISTINCT B_Nama_Bandara FROM bandara";
-                $result_tujuan = $conn->query($sql_tujuan);
+                $result_tujuan = $db->query($sql_tujuan);
 
                 if ($result_tujuan->num_rows > 0) {
                   while ($row_tujuan = $result_tujuan->fetch_assoc()) {
@@ -133,23 +107,9 @@
               <label for="kelas" class="formbold-form-label"> Kelas </label>
               <select class="formbold-form-input" name="kelas" id="kelas">
                 <?php
-                // Koneksi ke database
-                $servername = "localhost";
-                $username = "root";
-                $password = "";
-                $dbname = "swiftAir";
-
-                // Membuat koneksi
-                $conn = new mysqli($servername, $username, $password, $dbname);
-
-                // Memeriksa koneksi
-                if ($conn->connect_error) {
-                  die("Koneksi gagal: " . $conn->connect_error);
-                }
-
                 // Mengambil data dari kolom K_Nama dalam tabel kelas
                 $sql_kelas = "SELECT DISTINCT K_Nama FROM kelas";
-                $result_kelas = $conn->query($sql_kelas);
+                $result_kelas = $db->query($sql_kelas);
 
                 // Membuat opsi dropdown dari hasil query K_Nama
                 if ($result_kelas->num_rows > 0) {
