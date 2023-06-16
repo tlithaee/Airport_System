@@ -33,9 +33,11 @@
 			<?php
 				$sql = "SELECT Reservasi.R_ID, Reservasi.R_Tanggal, Pemesan.Pm_Nama, Reservasi.R_Jumlah_Kursi, Jadwal_Penerbangan.Jp_Bandara_Asal, Jadwal_Penerbangan.Jp_Bandara_Tujuan, Harga.H_Harga, Kelas.K_Nama
 						FROM Reservasi
-						JOIN Pemesan ON Reservasi.Pn_ID = Pemesan.Pm_ID
-						JOIN Jadwal_Penerbangan ON Reservasi.Pm_ID = Jadwal_Penerbangan.Jp_ID
-						JOIN Harga ON Reservasi.Pn_ID = Harga.H_ID
+						JOIN Pemesan ON Reservasi.Pm_ID = Pemesan.Pm_ID
+						JOIN Penerbangan ON Penerbangan.Pn_ID = Reservasi.Pn_ID
+						JOIN Jadwal_Penerbangan ON Penerbangan.Pn_ID = Jadwal_Penerbangan.Pn_ID
+						JOIN Harga_penerbangan ON Harga_penerbangan.Pn_ID = Penerbangan.Pn_ID
+						JOIN Harga ON Harga_penerbangan.H_ID = Harga.H_ID
 						JOIN Kelas ON Harga.K_ID = Kelas.K_ID";
 						
 						
