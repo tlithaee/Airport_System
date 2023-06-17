@@ -37,7 +37,8 @@
 						JOIN Penerbangan ON Penerbangan.Pn_ID = Reservasi.Pn_ID
 						JOIN Jadwal_Penerbangan ON Penerbangan.Pn_ID = Jadwal_Penerbangan.Pn_ID
 						JOIN Harga ON Harga.Pn_ID = Penerbangan.Pn_ID
-						JOIN Kelas ON Harga.K_ID = Kelas.K_ID";
+						JOIN Kelas ON Harga.K_ID = Kelas.K_ID
+      						GROUP BY Reservasi.R_ID";
 						
 						
 				$query = mysqli_query($db, $sql);
