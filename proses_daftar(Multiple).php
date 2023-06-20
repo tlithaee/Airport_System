@@ -109,10 +109,10 @@ if(isset($_POST['daftar'])){
 	// apakah query simpan berhasil?
 	if( $query && $query1 && $query2 && $query3 && $query4 && $query5 && $query6 && $query7 && $query8 &&  $query9 &&  $query10 &&  $query11 &&  $query12 && $query13 && $query14 && $queryn1 && $queryn2) {
 		// kalau berhasil alihkan ke halaman index.php dengan status=sukses
-		header('Location: combine.php?status=sukses');
+		header('Location: admin.php?status=sukses');
 	} else {
 		 // kalau gagal alihkan ke halaman indek.php dengan status=gagal
-		header('Location: combine.php?status=gagal');
+		header('Location: admin.php?status=gagal');
 	}
 
 } else {
